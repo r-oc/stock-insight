@@ -15,7 +15,7 @@
     <img src="images/full_logo.jpg" alt="Logo" width="460" height="200">
   </a>
 
-<h3 align="center">Stock Insights</h3>
+<h3 align="center">Stock Insight</h3>
 
   <p align="center">
     Track historical stock information and calculate holding positions including dividend reinvestment. Track any stock and get real returns.  
