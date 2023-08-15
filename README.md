@@ -12,7 +12,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/r-oc/stock-insight">
-    <img src="images/full_logo.jpg" alt="Logo" width="460" height="160">
+    <img src="images/full_logo.jpg" alt="Logo" width="460" height="200">
   </a>
 
 <h3 align="center">Stock Insights</h3>
