@@ -90,3 +90,5 @@ if __name__ == '__main__':
         st.sidebar.write('Starting Value: $', start_value)
         st.sidebar.write('Current Value: $', total_value)
         st.sidebar.write('Current Shares: ', shares)
+
+        st.toast('Stock information loaded!')
