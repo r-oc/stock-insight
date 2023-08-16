@@ -22,7 +22,7 @@ if __name__ == '__main__':
     try:
         info = yf.Ticker(ticker).info
     except requests.exceptions.HTTPError:
-        st.sidebar.write("* Invalid stock symbol, defaulting to AAPLTESTESTEST.")
+        st.sidebar.write("* Invalid stock symbol, defaulting to AAPL.")
         ticker = "AAPL"
 
     start_date = st.sidebar.date_input(
