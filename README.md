@@ -31,6 +31,14 @@
   </p>
 </div>
 
+<!-- ABOUT THE PROJECT -->
+## About The Project
+
+[![Stock Insight Screen Shot][product-screenshot]](stocki.streamlit.app)
+
+Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With 
 [![Python][Python]][Python-url]
@@ -54,7 +62,7 @@
 [license-url]: https://github.com/r-oc/stock-insight/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/r-oc
-[product-screenshot]: images/screenshot.png
+[product-screenshot]: images/stock_insight.jpg
 [Python]: https://img.shields.io/badge/Python-ffd343?style=for-the-badge&logo=python&logoColor=black
 [Python-url]: https://python.org
 [yfinance]: https://img.shields.io/badge/yfinance-50C878?style=for-the-badge&logo=yahoo&logoColor=white

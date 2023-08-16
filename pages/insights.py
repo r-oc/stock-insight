@@ -6,7 +6,7 @@ import yfinance as yf
 import pandas as pd
 
 if __name__ == '__main__':
-    st.set_page_config(page_title="Stock Insight", page_icon="images/tab_logo.jpg")
+    st.set_page_config(page_title='Stock Insight', page_icon='images/tab_logo.jpg')
 
     st.title('Stock Insight')
     st.write('Track historical stock information and calculate holding positions including dividend reinvestment.')
@@ -15,44 +15,44 @@ if __name__ == '__main__':
     st.sidebar.header('Enter stock information...')
 
     ticker = st.sidebar.text_input(
-        label="Stock Symbol",
-        value="AAPL"
+        label='Stock Symbol',
+        value='AAPL'
     )
 
     try:
         info = yf.Ticker(ticker).info
     except requests.exceptions.HTTPError:
-        st.sidebar.write("* Invalid stock symbol, defaulting to AAPL.")
-        ticker = "AAPL"
+        st.sidebar.write('* Invalid stock symbol, defaulting to AAPL.')
+        ticker = 'AAPL'
 
     start_date = st.sidebar.date_input(
-        label="Start Date",
-        format="YYYY-MM-DD",
+        label='Start Date',
+        format='YYYY-MM-DD',
         min_value=date(1900, 1, 1),
         max_value=date.today(),
         value=date(2022, 1, 1)
     )
 
     end_date = st.sidebar.date_input(
-        label="End Date",
-        format="YYYY-MM-DD",
+        label='End Date',
+        format='YYYY-MM-DD',
         min_value=date(1900, 1, 1),
         max_value=date.today(),
         value=date.today()
     )
 
     reinvest = st.sidebar.radio(
-        label="Handle Dividends",
-        options=["Reinvest", "Save as cash"]
+        label='Handle Dividends',
+        options=['Reinvest', 'Save as cash']
     )
 
-    if reinvest == "Reinvest":
+    if reinvest == 'Reinvest':
         reinvest = True
     else:
         reinvest = False
 
     shares = int(st.sidebar.text_input(
-        label="Shares Invested",
+        label='Shares Invested',
         value=1000
     ))
 
@@ -94,16 +94,17 @@ if __name__ == '__main__':
                     balance -= stock_price
                     shares += 1
 
-        df.set_index("Date", inplace=True)
-        st.subheader("Total Portfolio Value")
+        df.set_index('Date', inplace=True)
+        st.subheader('Total Portfolio Value')
         st.line_chart(df['Total Value'])
-        st.subheader("Total Shares")
+        st.subheader('Total Shares')
         st.line_chart(df['Shares'])
 
         start_value = round(start_value, 2)
         total_value = round(total_value, 2)
         dividend_sum = round(dividend_sum, 2)
 
+        st.sidebar.header('')
         st.sidebar.write('Starting Value: $', start_value)
         st.sidebar.write('Current Value: $', total_value)
         st.sidebar.write('Dividend Yield $', dividend_sum)
