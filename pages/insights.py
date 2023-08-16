@@ -17,6 +17,10 @@ if __name__ == '__main__':
         value="AAPL"
     )
 
+    if yf.Ticker(ticker).info is None:
+        st.sidebar.write("Invalid stock symbol, defaulting to AAPL.")
+        ticker = "AAPL"
+
     start_date = st.sidebar.date_input(
         label="Start Date",
         format="YYYY-MM-DD",
@@ -47,6 +51,9 @@ if __name__ == '__main__':
         label="Shares Invested",
         value=1000
     ))
+
+    if shares < 0:
+        shares = 1000
 
     # Frame that will store data for tables.
     df = pd.DataFrame(columns=['Date', 'Shares', 'Total Value', 'Dividend Yield'])
