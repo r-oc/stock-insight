@@ -94,7 +94,7 @@ if __name__ == '__main__':
                     balance -= stock_price
                     shares += 1
 
-        df.set_index('Date', inplace=True)
+        df.set_index("Date", inplace=True)
         st.subheader("Total Portfolio Value")
         st.line_chart(df['Total Value'])
         st.subheader("Total Shares")
