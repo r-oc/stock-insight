@@ -100,6 +100,8 @@ if __name__ == '__main__':
         st.subheader("Total Shares")
         st.line_chart(df['Shares'])
 
+        start_value = round(start_value, 2)
+        total_value = round(total_value, 2)
         st.sidebar.write('Starting Value: $', start_value)
         st.sidebar.write('Current Value: $', total_value)
         st.sidebar.write('Current Shares: ', shares)
