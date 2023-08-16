@@ -1,4 +1,6 @@
 from datetime import date
+
+import requests
 import streamlit as st
 import yfinance as yf
 import pandas as pd
@@ -17,8 +19,10 @@ if __name__ == '__main__':
         value="AAPL"
     )
 
-    if yf.Ticker(ticker).info is None:
-        st.sidebar.write("Invalid stock symbol, defaulting to AAPL.")
+    try:
+        yf.Ticker(ticker).info
+    except requests.exceptions.HTTPError:
+        st.sidebar.write("* Invalid stock symbol, defaulting to AAPL.")
         ticker = "AAPL"
 
     start_date = st.sidebar.date_input(
