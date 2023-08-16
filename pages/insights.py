@@ -20,7 +20,7 @@ if __name__ == '__main__':
     )
 
     try:
-        yf.Ticker(ticker).info
+        info = yf.Ticker(ticker).info
     except requests.exceptions.HTTPError:
         st.sidebar.write("* Invalid stock symbol, defaulting to AAPL.")
         ticker = "AAPL"
