@@ -38,42 +38,55 @@ if __name__ == '__main__':
         options=["Reinvest", "Save as cash"]
     )
 
+    if reinvest == "Reinvest":
+        reinvest = True
+    else:
+        reinvest = False
+
     shares = int(st.sidebar.text_input(
         label="Shares Invested",
         value=1000
     ))
 
-    # st.write(stock_symbol, start_date, end_date, handle_dividends, shares_invested)
-
+    # Frame that will store data for tables.
     df = pd.DataFrame(columns=['Date', 'Shares', 'Total Value', 'Dividend Yield'])
 
-    # Unfortunately yfinance doesn't allow you to get Close price in their Ticker.history() method and yf.download()
-    # doesn't give you dividend data =(
-    dividend_data = yf.Ticker(ticker).history(start=start_date, end=end_date)['Dividends']
-    price_data = yf.download(tickers=ticker, start=start_date, end=end_date)
+    with st.spinner('Downloading stock data...'):
+        dividend_data = yf.Ticker(ticker).history(start=start_date, end=end_date)['Dividends']
+        price_data = yf.download(tickers=ticker, start=start_date, end=end_date)
 
-    balance = 0
-    dividend_sum = 0
-    for i, row in enumerate(price_data.iterrows()):
-        date = str(row[0])[:10]
-        stock_price = row[1]['Close']
-        total_value = stock_price * shares
+    with st.spinner('Calculating returns...'):
 
-        new_row = {'Date': date, 'Shares': shares, 'Total Value': total_value, 'Dividend Yield': dividend_sum}
-        df.loc[len(df)] = new_row
+        start_value = price_data['Close'][0] * shares
 
-        dividend_paid = dividend_data[i]
-        dividend_sum += dividend_paid * shares
-        if reinvest and dividend_paid > 0:
-            total_dividend = dividend_paid * shares
-            drip = (total_dividend + balance) // stock_price
+        balance = 0
+        dividend_sum = 0
+        total_value = 0
+        for i, row in enumerate(price_data.iterrows()):
+            date = str(row[0])[:10]
+            stock_price = row[1]['Close']
+            total_value = stock_price * shares
 
-            balance += total_dividend - drip * stock_price
+            new_row = {'Date': date, 'Shares': shares, 'Total Value': total_value, 'Dividend Yield': dividend_sum}
+            df.loc[len(df)] = new_row
 
-            shares += int(drip)
-            while balance >= stock_price:
-                balance -= stock_price
-                shares += 1
+            dividend_paid = dividend_data[i]
+            dividend_sum += dividend_paid * shares
+            if reinvest and dividend_paid > 0:
+                total_dividend = dividend_paid * shares
+                drip = (total_dividend + balance) // stock_price
 
-    st.line_chart(df['Total Value'])
+                balance += total_dividend - drip * stock_price
 
+                shares += int(drip)
+                while balance >= stock_price:
+                    balance -= stock_price
+                    shares += 1
+
+        df.set_index('Date', inplace=True)
+        st.line_chart(df['Total Value'])
+        st.line_chart(df['Shares'])
+
+        st.sidebar.write('Starting Value: $', start_value)
+        st.sidebar.write('Current Value: $', total_value)
+        st.sidebar.write('Current Shares: ', shares)
