@@ -1,5 +1,6 @@
 from datetime import date
 import streamlit as st
+from utilities.stock_info import get_stock_frame
 
 if __name__ == '__main__':
     st.set_page_config(page_title="Stock Insight", page_icon="images/tab_logo.jpg")
@@ -42,3 +43,12 @@ if __name__ == '__main__':
     )
 
     # st.write(stock_symbol, start_date, end_date, handle_dividends, shares_invested)
+
+    if handle_dividends == "Reinvest":
+        handle_dividends = True
+    else:
+        handle_dividends = False
+
+    data_frame = get_stock_frame(stock_symbol, start_date, end_date, handle_dividends, shares_invested)
+
+    st.line_chart(data_frame['Total Value'])
