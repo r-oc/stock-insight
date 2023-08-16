@@ -22,7 +22,7 @@ if __name__ == '__main__':
         format="YYYY-MM-DD",
         min_value=date(1900, 1, 1),
         max_value=date.today(),
-        value=date(1900, 1, 1)
+        value=date(2022, 1, 1)
     )
 
     end_date = st.sidebar.date_input(
