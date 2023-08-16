@@ -102,6 +102,8 @@ if __name__ == '__main__':
 
         start_value = round(start_value, 2)
         total_value = round(total_value, 2)
+        dividend_sum = round(dividend_sum, 2)
+
         st.sidebar.write('Starting Value: $', start_value)
         st.sidebar.write('Current Value: $', total_value)
         st.sidebar.write('Dividend Yield $', dividend_sum)
