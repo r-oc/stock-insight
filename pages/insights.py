@@ -95,7 +95,9 @@ if __name__ == '__main__':
                     shares += 1
 
         df.set_index('Date', inplace=True)
+        st.subheader("Total Portfolio Value")
         st.line_chart(df['Total Value'])
+        st.subheader("Total Shares")
         st.line_chart(df['Shares'])
 
         st.sidebar.write('Starting Value: $', start_value)
