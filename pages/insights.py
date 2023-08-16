@@ -100,8 +100,8 @@ if __name__ == '__main__':
         st.subheader("Total Shares")
         st.line_chart(df['Shares'])
 
-        st.sidebar.write('Starting Value: $', round(start_value, 2))
-        st.sidebar.write('Current Value: $', round(total_value, 2))
+        st.sidebar.write('Starting Value: $', start_value)
+        st.sidebar.write('Current Value: $', total_value)
         st.sidebar.write('Current Shares: ', shares)
 
         st.toast('Stock information loaded!')
