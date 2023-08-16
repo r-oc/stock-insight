@@ -1,6 +1,7 @@
 from datetime import date
 import streamlit as st
-from utilities.stock_info import get_stock_frame
+import yfinance as yf
+import pandas as pd
 
 if __name__ == '__main__':
     st.set_page_config(page_title="Stock Insight", page_icon="images/tab_logo.jpg")
@@ -11,7 +12,7 @@ if __name__ == '__main__':
     # Build Sidebar
     st.sidebar.header('Enter stock information...')
 
-    stock_symbol = st.sidebar.text_input(
+    ticker = st.sidebar.text_input(
         label="Stock Symbol",
         value="AAPL"
     )
@@ -32,23 +33,47 @@ if __name__ == '__main__':
         value=date.today()
     )
 
-    handle_dividends = st.sidebar.radio(
+    reinvest = st.sidebar.radio(
         label="Handle Dividends",
         options=["Reinvest", "Save as cash"]
     )
 
-    shares_invested = st.sidebar.text_input(
+    shares = int(st.sidebar.text_input(
         label="Shares Invested",
         value=1000
-    )
+    ))
 
     # st.write(stock_symbol, start_date, end_date, handle_dividends, shares_invested)
 
-    if handle_dividends == "Reinvest":
-        handle_dividends = True
-    else:
-        handle_dividends = False
+    df = pd.DataFrame(columns=['Date', 'Shares', 'Total Value', 'Dividend Yield'])
 
-    data_frame = get_stock_frame(stock_symbol, start_date, end_date, handle_dividends, shares_invested)
+    # Unfortunately yfinance doesn't allow you to get Close price in their Ticker.history() method and yf.download()
+    # doesn't give you dividend data =(
+    dividend_data = yf.Ticker(ticker).history(start=start_date, end=end_date)['Dividends']
+    price_data = yf.download(tickers=ticker, start=start_date, end=end_date)
 
-    st.line_chart(data_frame['Total Value'])
+    balance = 0
+    dividend_sum = 0
+    for i, row in enumerate(price_data.iterrows()):
+        date = str(row[0])[:10]
+        stock_price = row[1]['Close']
+        total_value = stock_price * shares
+
+        new_row = {'Date': date, 'Shares': shares, 'Total Value': total_value, 'Dividend Yield': dividend_sum}
+        df.loc[len(df)] = new_row
+
+        dividend_paid = dividend_data[i]
+        dividend_sum += dividend_paid * shares
+        if reinvest and dividend_paid > 0:
+            total_dividend = dividend_paid * shares
+            drip = (total_dividend + balance) // stock_price
+
+            balance += total_dividend - drip * stock_price
+
+            shares += int(drip)
+            while balance >= stock_price:
+                balance -= stock_price
+                shares += 1
+
+    st.line_chart(df['Total Value'])
+
