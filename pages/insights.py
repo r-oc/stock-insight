@@ -111,12 +111,19 @@ if __name__ == '__main__':
                     shares += 1
 
         df.set_index('Date', inplace=True)
+
         st.subheader('Total Portfolio Value')
         st.line_chart(df['Total Value'])
-        st.subheader('Total Shares')
-        st.line_chart(df['Shares'])
-        st.subheader('Stock Price')
-        st.line_chart(df['Stock Value'])
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.subheader('Stock Price')
+            st.line_chart(df['Stock Value'])
+
+        with col2:
+            st.subheader('Total Shares')
+            st.line_chart(df['Shares'])
 
         start_value = round(start_value, 2)
         total_value = round(total_value, 2)
