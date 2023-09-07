@@ -45,26 +45,42 @@ if __name__ == '__main__':
         label='Handle Dividends',
         options=['Reinvest', 'Save as cash']
     )
+    reinvest = True if reinvest == "Reinvest" else False
 
-    if reinvest == 'Reinvest':
-        reinvest = True
+    investment_type = st.sidebar.radio(
+        label='Type of investment',
+        options=['Shares', 'Cash']
+    )
+
+    # Avoid any undefined errors, even though shares would always be calculated.
+    shares = 1000
+    cash_invested = 1000
+
+    if investment_type == 'Shares':
+        shares = int(st.sidebar.text_input(
+            label='Shares Invested',
+            value=1000
+        ))
     else:
-        reinvest = False
-
-    shares = int(st.sidebar.text_input(
-        label='Shares Invested',
-        value=1000
-    ))
-
-    if shares < 0:
-        shares = 1000
+        cash_invested = int(st.sidebar.text_input(
+            label=f'Cash invested on {start_date}',
+            value=1000
+        ))
 
     # Frame that will store data for tables.
-    df = pd.DataFrame(columns=['Date', 'Shares', 'Total Value', 'Dividend Yield'])
+    df = pd.DataFrame(columns=['Date', 'Shares', 'Total Value', 'Dividend Yield', 'Stock Value'])
 
     with st.spinner('Downloading stock data...'):
         dividend_data = yf.Ticker(ticker).history(start=start_date, end=end_date)['Dividends']
         price_data = yf.download(tickers=ticker, start=start_date, end=end_date)
+
+    # if investment_type is cash, calculate shares.
+    if investment_type == 'Cash':
+        stock_price_day_one = price_data['Close'][0]
+        shares = int(cash_invested / stock_price_day_one)
+
+    if shares < 0:
+        shares = 1000
 
     with st.spinner('Calculating returns...'):
 
@@ -78,7 +94,7 @@ if __name__ == '__main__':
             stock_price = row[1]['Close']
             total_value = stock_price * shares
 
-            new_row = {'Date': date, 'Shares': shares, 'Total Value': total_value, 'Dividend Yield': dividend_sum}
+            new_row = {'Date': date, 'Shares': shares, 'Total Value': total_value, 'Dividend Yield': dividend_sum, 'Stock Value': stock_price}
             df.loc[len(df)] = new_row
 
             dividend_paid = dividend_data[i]
@@ -99,6 +115,8 @@ if __name__ == '__main__':
         st.line_chart(df['Total Value'])
         st.subheader('Total Shares')
         st.line_chart(df['Shares'])
+        st.subheader('Stock Price')
+        st.line_chart(df['Stock Value'])
 
         start_value = round(start_value, 2)
         total_value = round(total_value, 2)
